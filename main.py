@@ -20,7 +20,7 @@ def home():
 def extract_vba_macros(file_path):
     vba_macros = []
     parser = VBA_Parser(file_path)
-    if parser.contains_macros:
+    if parser.contains_vba_macros:
         for (_, stream_path, vba_filename, vba_code) in parser.extract_macros():
             if vba_code:
                 vba_macros.append({
@@ -103,4 +103,5 @@ def convert_excel():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
+
 
