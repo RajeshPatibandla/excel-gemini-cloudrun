@@ -20,6 +20,11 @@ GEMINI_MODEL_ENDPOINT = (
 @app.route("/")
 def home():
     return "Service is running!"
+@app.route("/testlog")
+def test_log():
+    print("DEBUG: /testlog route called!")
+    return "Test log endpoint hit"
+
 
 def extract_vba_macros(file_path):
     vba_macros = []
@@ -114,6 +119,7 @@ def convert_excel():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
+
 
 
 
