@@ -1,18 +1,22 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import tempfile
 import os
 from oletools.olevba import VBA_Parser
 import requests
 
 app = Flask(__name__)
+CORS(app)
 
-# ---- CONFIGURATION ----
-GEMINI_API_KEY = 'AIzaSyDnROx1cvFKvVhFKcIckCFzNUpbYx9zyvc'
+GEMINI_API_KEY = '<YOUR_GEMINI_API_KEY_HERE>'
 GEMINI_MODEL_ENDPOINT = (
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent'
 )
 
-# ---- FUNCTION: Extract macros from Excel ----
+@app.route("/")
+def home():
+    return "Service is running!"
+
 def extract_vba_macros(file_path):
     vba_macros = []
     parser = VBA_Parser(file_path)
@@ -26,7 +30,6 @@ def extract_vba_macros(file_path):
     parser.close()
     return vba_macros
 
-# ---- FUNCTION: Convert VBA to Apps Script using Gemini ----
 def convert_vba_with_gemini(vba_code):
     prompt_text = (
         "Convert this Excel VBA macro to Google Apps Script for Google Sheets. "
@@ -59,7 +62,6 @@ def convert_vba_with_gemini(vba_code):
         text = f"Error parsing Gemini response: {str(e)}"
     return text
 
-# ---- API ENDPOINT ----
 @app.route("/convert-excel", methods=["POST"])
 def convert_excel():
     if "file" not in request.files:
@@ -72,10 +74,8 @@ def convert_excel():
         temp_path = tmp.name
 
     macros_out = []
-    # Extract VBA macros
     vba_macros = extract_vba_macros(temp_path)
 
-    # For each VBA macro, call Gemini and get Apps Script conversion
     for macro in vba_macros:
         result = convert_vba_with_gemini(macro['vba'])
         macros_out.append({
@@ -85,10 +85,8 @@ def convert_excel():
             "notes": "See Gemini output for unsupported parts/suggestions."
         })
 
-    # Clean up temp file
     os.remove(temp_path)
 
-    # If no macros found, add a note
     if not macros_out:
         macros_out.append({
             "name": "NoMacrosFound",
