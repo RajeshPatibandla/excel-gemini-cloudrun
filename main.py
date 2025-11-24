@@ -21,15 +21,19 @@ def extract_vba_macros(file_path):
     vba_macros = []
     parser = VBA_Parser(file_path)
     print("Parser type:", type(parser))
+    print("File being parsed:", file_path)
     print("Has VBA Macros?", parser.contains_vba_macros)
     if parser.contains_vba_macros:
         for (_, stream_path, vba_filename, vba_code) in parser.extract_macros():
-            print("Macro found:", vba_filename, vba_code)
+            print("Macro found:", vba_filename, stream_path)
             if vba_code:
+                print("VBA Code:", vba_code[:100], "...")  # Print first 100 characters for brevity
                 vba_macros.append({
                     'name': vba_filename or stream_path or 'UnknownMacro',
                     'vba': vba_code
                 })
+    else:
+        print("No VBA macros found in file.")
     parser.close()
     return vba_macros
 
@@ -106,6 +110,7 @@ def convert_excel():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
+
 
 
 
