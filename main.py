@@ -4,6 +4,8 @@ import tempfile
 import os
 from oletools.olevba import VBA_Parser
 import requests
+import sys
+print("Startup test print!", file=sys.stdout, flush=True)
 
 app = Flask(__name__)
 CORS(app)
@@ -110,6 +112,7 @@ def convert_excel():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
+
 
 
 
