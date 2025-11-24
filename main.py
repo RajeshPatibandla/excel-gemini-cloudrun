@@ -8,7 +8,7 @@ import requests
 app = Flask(__name__)
 CORS(app)
 
-GEMINI_API_KEY = '<YOUR_GEMINI_API_KEY_HERE>'
+GEMINI_API_KEY = 'AIzaSyDnROx1cvFKvVhFKcIckCFzNUpbYx9zyvc'
 GEMINI_MODEL_ENDPOINT = (
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent'
 )
@@ -103,3 +103,4 @@ def convert_excel():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
+
